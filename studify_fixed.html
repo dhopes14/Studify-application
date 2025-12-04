@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piattaforma Studenti - Materiale Didattico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #48bb78 100%);
+            min-height: 100vh;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login/Signup */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .auth-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 400px;
+        }
+
+        .auth-box h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .auth-box input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .auth-box button {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #38a169;
+        }
+
+        .btn-gray {
+            background: #a0aec0;
+            color: white;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #667eea 0%, #48bb78 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Sidebar */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100%;
+            background: white;
+            padding: 30px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        .subject-btn {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .subject-btn:hover {
+            background: #f7fafc;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .home-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .home-icon {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(72, 187, 120, 0.3));
+            border-radius: 50%;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 100px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .home-screen h2 {
+            color: white;
+            font-size: 42px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .home-screen p {
+            color: white;
+            font-size: 20px;
+            margin-bottom: 40px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .home-btn {
+            background: white;
+            color: #667eea;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Choose View */
+        .choose-screen {
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .choose-screen h2 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 60px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .choose-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .choose-card {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .choose-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .choose-card.upload {
+            border: 3px solid #48bb78;
+        }
+
+        .choose-card.view {
+            border: 3px solid #667eea;
+        }
+
+        .choose-card svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+
+        .choose-card h3 {
+            font-size: 24px;
+            color: #2d3748;
+        }
+
+        /* Upload Form */
+        .upload-screen, .view-screen {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .form-card h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-card select,
+        .form-card input,
+        .form-card textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+        }
+
+        .form-card textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload {
+            border: 3px dashed #e2e8f0;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #667eea;
+            background: #f7fafc;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        /* Content Cards */
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .content-header h2 {
+            color: white;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .content-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .content-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .content-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+        }
+
+        .content-card h3 {
+            font-size: 22px;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .content-card p {
+            color: #718096;
+            margin-bottom: 5px;
+        }
+
+        .content-meta {
+            font-size: 14px;
+            color: #a0aec0;
+            margin-top: 10px;
+        }
+
+        .content-link {
+            color: #667eea;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .content-link:hover {
+            text-decoration: underline;
+        }
+
+        .delete-btn {
+            background: #f56565;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #e53e3e;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: white;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Delete Modal */
+        .delete-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .delete-modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .delete-modal h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .delete-modal input {
+            width: 100%;
+            padding: 15px;
+            margin: 20px 0;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .delete-modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .delete-modal-buttons button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        @media (max-width: 768px) {
+            .choose-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                width: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Screen -->
+    <div id="authScreen" class="auth-container">
+        <div class="auth-box">
+            <h1>📚 Piattaforma Studenti</h1>
+            <div id="authButtons">
+                <button class="btn-primary" onclick="showLoginForm()">🔐 Accedi</button>
+                <button class="btn-secondary" onclick="showSignupForm()">➕ Registrati</button>
+            </div>
+            <div id="loginForm" class="hidden">
+                <input type="email" id="loginEmail" placeholder="Email">
+                <input type="password" id="loginPassword" placeholder="Password">
+                <button class="btn-primary" onclick="handleLogin()">Accedi</button>
+                <button class="btn-gray" onclick="showAuthButtons()">Indietro</button>
+            </div>
+            <div id="signupForm" class="hidden">
+                <input type="email" id="signupEmail" placeholder="Email">
+                <input type="password" id="signupPassword" placeholder="Password">
+                <button class="btn-secondary" onclick="handleSignup()">Registrati</button>
+                <button class="btn-gray" onclick="showAuthButtons()">Indietro</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="appScreen" class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="menu-btn" onclick="toggleSidebar()">☰ Menu</button>
+                    <h1>📚 Materiale Didattico</h1>
+                </div>
+                <div>
+                    <span id="userEmail" style="margin-left: 20px;"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()">
+            <div class="sidebar" onclick="event.stopPropagation()">
+                <h2>Materie</h2>
+                <button class="subject-btn" onclick="selectSubject('Storia')">Storia</button>
+                <button class="subject-btn" onclick="selectSubject('Italiano')">Italiano</button>
+                <button class="subject-btn" onclick="selectSubject('Matematica')">Matematica</button>
+                <button class="subject-btn" onclick="selectSubject('Latino')">Latino</button>
+                <button class="subject-btn" onclick="selectSubject('Chimica')">Chimica</button>
+                <button class="subject-btn" onclick="selectSubject('Fisica')">Fisica</button>
+                <button class="subject-btn" onclick="selectSubject('Arte')">Arte</button>
+                <button class="subject-btn" onclick="selectSubject('Informatica')">Informatica</button>
+                <button class="subject-btn" onclick="selectSubject('Inglese')">Inglese</button>
+                <button class="subject-btn" onclick="selectSubject('Religione')">Religione</button>
+                <button class="subject-btn" onclick="selectSubject('Educazione Civica')">Educazione Civica</button>
+                <button class="subject-btn" onclick="selectSubject('Motoria')">Motoria</button>
+                <button class="subject-btn" onclick="selectSubject('Filosofia')">Filosofia</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Home Screen -->
+            <div id="homeScreen" class="home-screen">
+                <div class="home-icon">📖</div>
+                <h2>Benvenuto sulla Piattaforma</h2>
+                <p>Seleziona una materia dal menu per iniziare</p>
+                <button class="home-btn" onclick="toggleSidebar()">Apri Menu Materie</button>
+            </div>
+
+            <!-- Choose Screen -->
+            <div id="chooseScreen" class="choose-screen hidden">
+                <h2 id="chooseTitle"></h2>
+                <div class="choose-buttons">
+                    <div class="choose-card upload" onclick="showUploadScreen()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <h3>Inserisci Appunti</h3>
+                    </div>
+                    <div class="choose-card view" onclick="showViewScreen()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        <h3>Visualizza Contenuti</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Screen -->
+            <div id="uploadScreen" class="upload-screen hidden">
+                <div class="form-card">
+                    <h2>Carica Nuovo Contenuto - <span id="uploadSubject"></span></h2>
+                    <div class="form-group">
+                        <select id="contentType" onchange="updateFormFields()">
+                            <option value="note">Foto Appunti</option>
+                            <option value="video">Video</option>
+                            <option value="youtube">Link YouTube</option>
+                            <option value="presentation">Presentazione</option>
+                            <option value="document">Documento</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="contentTitle" placeholder="Titolo">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="contentDescription" placeholder="Descrizione (opzionale)"></textarea>
+                    </div>
+                    <div class="form-group" id="linkGroup" style="display: none;">
+                        <input type="text" id="contentLink" placeholder="Link video">
+                    </div>
+                    <div class="form-group" id="fileGroup">
+                        <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+                            <p>📎 Clicca per caricare file</p>
+                            <p id="fileName" style="margin-top: 10px; color: #667eea;"></p>
+                        </div>
+                        <input type="file" id="fileInput" style="display: none;" onchange="updateFileName()">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="contentPassword" placeholder="Password per eliminare (ricordala!)">
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="handleUpload()">Carica</button>
+                        <button class="btn-gray" onclick="backToChoose()">Annulla</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Screen -->
+            <div id="viewScreen" class="view-screen hidden">
+                <div class="content-header">
+                    <h2>Contenuti - <span id="viewSubject"></span></h2>
+                    <button class="btn-gray" onclick="backToChoose()">Indietro</button>
+                </div>
+                <div id="contentList" class="content-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="delete-modal">
+        <div class="delete-modal-content">
+            <h3>⚠️ Sicuro di voler eliminare il contenuto?</h3>
+            <p style="color: #718096; margin-bottom: 10px;">Questa azione non può essere annullata.</p>
+            <input type="password" id="deletePassword" placeholder="Inserisci la password per confermare">
+            <div class="delete-modal-buttons">
+                <button class="btn-danger" onclick="confirmDelete()">Sì, elimina</button>
+                <button class="btn-gray" onclick="closeDeleteModal()">No, annulla</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = null;
+        let users = {};
+        let contents = {};
+        let currentSubject = null;
+        let deleteContentId = null;
+        let deleteContentPassword = null;
+
+        // Storage functions usando localStorage
+        function loadData() {
+            try {
+                const usersData = localStorage.getItem('studify_users');
+                const contentsData = localStorage.getItem('studify_contents');
+                
+                if (usersData) users = JSON.parse(usersData);
+                if (contentsData) contents = JSON.parse(contentsData);
+            } catch (error) {
+                console.log('Inizializzazione dati...');
+            }
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('studify_users', JSON.stringify(users));
+                localStorage.setItem('studify_contents', JSON.stringify(contents));
+            } catch (error) {
+                console.error('Errore salvataggio:', error);
+                alert('Errore nel salvataggio dei dati. Lo storage del browser potrebbe essere pieno.');
+            }
+        }
+
+        // Auth functions
+        function showLoginForm() {
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+        }
+
+        function showSignupForm() {
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+        }
+
+        function showAuthButtons() {
+            document.getElementById('authButtons').classList.remove('hidden');
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                alert('Inserisci email e password');
+                return;
+            }
+
+            if (!users[email] || users[email].password !== password) {
+                alert('Credenziali errate');
+                return;
+            }
+
+            currentUser = email;
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+        }
+
+        function handleSignup() {
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (!email || !password) {
+                alert('Inserisci email e password');
+                return;
+            }
+
+            if (users[email]) {
+                alert('Email già registrata');
+                return;
+            }
+
+            users[email] = { password: password };
+            saveData();
+
+            currentUser = email;
+            document.getElementById('userEmail').textContent = email;
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appScreen').style.display = 'block';
+        }
+
+        // Navigation
+        function toggleSidebar() {
+            const overlay = document.getElementById('sidebarOverlay');
+            overlay.style.display = overlay.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function selectSubject(subject) {
+            currentSubject = subject;
+            toggleSidebar();
+            
+            document.getElementById('homeScreen').classList.add('hidden');
+            document.getElementById('chooseScreen').classList.remove('hidden');
+            document.getElementById('uploadScreen').classList.add('hidden');
+            document.getElementById('viewScreen').classList.add('hidden');
+            
+            document.getElementById('chooseTitle').textContent = subject;
+        }
+
+        function showUploadScreen() {
+            document.getElementById('chooseScreen').classList.add('hidden');
+            document.getElementById('uploadScreen').classList.remove('hidden');
+            document.getElementById('uploadSubject').textContent = currentSubject;
+            updateFormFields();
+        }
+
+        function showViewScreen() {
+            document.getElementById('chooseScreen').classList.add('hidden');
+            document.getElementById('viewScreen').classList.remove('hidden');
+            document.getElementById('viewSubject').textContent = currentSubject;
+            displayContents();
+        }
+
+        function backToChoose() {
+            document.getElementById('uploadScreen').classList.add('hidden');
+            document.getElementById('viewScreen').classList.add('hidden');
+            document.getElementById('chooseScreen').classList.remove('hidden');
+            clearForm();
+        }
+
+        function updateFormFields() {
+            const type = document.getElementById('contentType').value;
+            const linkGroup = document.getElementById('linkGroup');
+            const fileGroup = document.getElementById('fileGroup');
+
+            if (type === 'youtube' || type === 'video') {
+                linkGroup.style.display = 'block';
+                fileGroup.style.display = 'none';
+            } else {
+                linkGroup.style.display = 'none';
+                fileGroup.style.display = 'block';
+            }
+        }
+
+        function updateFileName() {
+            const fileInput = document.getElementById('fileInput');
+            const fileName = document.getElementById('fileName');
+            if (fileInput.files[0]) {
+                fileName.textContent = fileInput.files[0].name;
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('contentTitle').value = '';
+            document.getElementById('contentDescription').value = '';
+            document.getElementById('contentLink').value = '';
+            document.getElementById('contentPassword').value = '';
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileName').textContent = '';
+        }
+
+        // Content moderation
+        function moderateContent(text) {
+            const badWords = ['stupido', 'idiota', 'cretino', 'volgare'];
+            const textLower = text.toLowerCase();
+            return !badWords.some(word => textLower.includes(word));
+        }
+
+        // Upload content
+        function handleUpload() {
+            const title = document.getElementById('contentTitle').value;
+            const description = document.getElementById('contentDescription').value;
+            const type = document.getElementById('contentType').value;
+            const link = document.getElementById('contentLink').value;
+            const password = document.getElementById('contentPassword').value;
+            const file = document.getElementById('fileInput').files[0];
+
+            if (!title || !password) {
+                alert('Inserisci titolo e password');
+                return;
+            }
+
+            if (!moderateContent(title + ' ' + description + ' ' + link)) {
+                alert('Contenuto non appropriato rilevato. Inserisci materiale didattico pertinente.');
+                return;
+            }
+
+            const contentId = Date.now().toString();
+            const newContent = {
+                id: contentId,
+                type: type,
+                title: title,
+                description: description,
+                link: link,
+                fileName: file ? file.name : null,
+                subject: currentSubject,
+                author: currentUser,
+                password: password,
+                date: new Date().toLocaleDateString('it-IT')
+            };
+
+            if (!contents[currentSubject]) {
+                contents[currentSubject] = [];
+            }
+
+            contents[currentSubject].push(newContent);
+            saveData();
+
+            clearForm();
+            showViewScreen();
+            alert('Contenuto caricato con successo!');
+        }
+
+        // Display contents
+        function displayContents() {
+            const contentList = document.getElementById('contentList');
+            const subjectContents = contents[currentSubject] || [];
+
+            if (
